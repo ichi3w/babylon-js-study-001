@@ -17,6 +17,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babylonjs/core": "^5.29.0",
+    "@babylonjs/materials": "^5.29.0",
     "@typescript-eslint/eslint-plugin": "^5.40.1",
     "@typescript-eslint/parser": "^5.40.1",
     "@webpack-cli/generators": "^2.5.0",
