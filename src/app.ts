@@ -1,19 +1,20 @@
-import { FreeCamera } from "@babylonjs/core/Cameras/freeCamera";
+import { BaGround } from "./BaGround";
 import { Engine } from "@babylonjs/core/Engines/engine";
 import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
+import { SceneLoader } from "@babylonjs/core/Loading/sceneLoader";
 import { Vector3 } from "@babylonjs/core/Maths/math.vector";
 import { CreateGround } from "@babylonjs/core/Meshes/Builders/groundBuilder";
 import { CreateSphere } from "@babylonjs/core/Meshes/Builders/sphereBuilder";
 import { Scene } from "@babylonjs/core/scene";
+import { BaCamera } from "./BaCamera";
 
 import { GridMaterial } from "@babylonjs/materials/grid/gridMaterial";
+import { Sound } from "@babylonjs/core";
 
 export class BabylonApp {
   private _canvas?: HTMLCanvasElement;
   private _scene?: Scene;
   private _engine?: Engine;
-
-  private _camera?: FreeCamera;
 
   /**
    * Runs the BabylonApp.
@@ -22,23 +23,43 @@ export class BabylonApp {
     const resultCs = this._createScene();
     if (!resultCs) return;
 
-    this._createCamera();
-    this._createLight();
-    this._createObjects();
+    if (!this._scene || !this._engine || !this._canvas) return;
 
-    if (this._engine) {
-      // Render every frame
-      this._engine.runRenderLoop(this._update.bind(this));
-    }
+    this._createLight();
+
+    const baCamera = new BaCamera();
+    baCamera.createArcRotateCamera(this._scene, this._canvas);
+
+    const baGround = new BaGround();
+    baGround.createGround();
+
+    this._createObjects();
+    // this._loadMesh();
+    // this._createSound();
+
+    // Render every frame
+    this._engine.runRenderLoop(this._onUpdate.bind(this));
+
+    // Add Resize Event
+    window.addEventListener("resize", this._onResize.bind(this));
   }
 
   /**
    * Update Every Frame
    */
-  private _update() {
+  private _onUpdate() {
     if (!this._scene) return;
 
     this._scene.render();
+  }
+
+  /**
+   * Resize
+   */
+  private _onResize() {
+    if (!this._engine) return;
+
+    this._engine.resize();
   }
 
   /**
@@ -62,23 +83,8 @@ export class BabylonApp {
   }
 
   /**
-   * Create Camera
+   * Create Light
    */
-  private _createCamera() {
-    // This creates and positions a free camera (non-mesh)
-    this._camera = new FreeCamera(
-      "camera1",
-      new Vector3(0, 5, -10),
-      this._scene
-    );
-
-    // This targets the camera to scene origin
-    this._camera.setTarget(Vector3.Zero());
-
-    // This attaches the camera to the canvas
-    this._camera.attachControl(this._canvas, true);
-  }
-
   private _createLight() {
     if (!this._scene) return;
 
@@ -117,7 +123,30 @@ export class BabylonApp {
       this._scene
     );
 
+    ground.position.y = 0.5;
+
     // Affect a material
     ground.material = material;
+  }
+
+  private _loadMesh() {
+    SceneLoader.ImportMeshAsync(
+      "semi_house",
+      "https://assets.babylonjs.com/meshes/",
+      "both_houses_scene.babylon",
+      this._scene
+    );
+  }
+
+  private _createSound() {
+    // Load the sound and play it automatically once ready
+    const music = new Sound(
+      "cello",
+      "https://playground.babylonjs.com/sounds/cellolong.wav",
+      this._scene,
+      null,
+      { loop: true, autoplay: true }
+    );
+    music.play();
   }
 }

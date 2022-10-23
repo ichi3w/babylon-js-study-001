@@ -16,11 +16,11 @@
     "noFallthroughCasesInSwitch": true,
     "noPropertyAccessFromIndexSignature": true,
     "noUncheckedIndexedAccess": true,
-    "importsNotUsedAsValues": "error",
     "checkJs": true,
     "allowJs": true,
     "isolatedModules": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "sourceMap": true
   },
   "files": ["src/index.ts"]
 }
