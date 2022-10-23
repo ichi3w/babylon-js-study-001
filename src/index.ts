@@ -1,5 +1,8 @@
-import { init } from "./app";
+import { BabylonApp } from "./app";
 import "destyle.css";
 import "./css/index.scss";
 
-init();
+document.addEventListener("DOMContentLoaded", () => {
+  const app = new BabylonApp();
+  app.init();
+});

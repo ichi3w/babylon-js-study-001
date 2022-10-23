@@ -1,35 +1,15 @@
-# 開発用 Webpack テンプレート(HTML, TypeScript)
+# Babylon.js 勉強用
 
-自身の開発用テンプレート。
-HTML, JavaScript を Webpack でコンパイルするもの。
+Webpack ベースで babylon.js をいじってみる。
 
-## 使い方
+## やりたいこと
 
-適当なディレクトリにクローンした後、履歴を削除。
+- エンジンの作成
+- シーンの作成
+- カメラの作成
+- ライトの作成
+- メッシュの作成
+- レンダリング
 
-```
-git clone [this_repository] [directory_yourself]
-git remote rm origin
-git checkout --orphan tmp
-git commit -m "first commit"
-git checkout -B main
-git branch -d tmp
-```
-
-その後、`npm i` にてパッケージをインストール。
-
-# 🚀 Welcome to your new awesome project!
-
-This project has been created using **webpack-cli**, you can now run
-
-```
-npm run build
-```
-
-or
-
-```
-yarn build
-```
-
-to bundle your application
+- マウス操作
+- マテリアルの追加

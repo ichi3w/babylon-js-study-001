@@ -38,6 +38,7 @@ const config = {
       directory: path.join(__dirname, "public"),
     },
   },
+  devtool: "eval-source-map",
   plugins: [
     new HtmlWebpackPlugin({
       template: path.join(__dirname, "public/index.html"),

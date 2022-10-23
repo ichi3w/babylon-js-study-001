@@ -8,61 +8,116 @@ import { Scene } from "@babylonjs/core/scene";
 
 import { GridMaterial } from "@babylonjs/materials/grid/gridMaterial";
 
-const createScene = () => {
-  // Get the canvas element from the DOM.
-  const canvas = document.getElementById("renderCanvas");
+export class BabylonApp {
+  private _canvas?: HTMLCanvasElement;
+  private _scene?: Scene;
+  private _engine?: Engine;
 
-  if (!canvas || !(canvas instanceof HTMLCanvasElement)) return;
+  private _camera?: FreeCamera;
 
-  // Associate a Babylon Engine to it.
-  const engine = new Engine(canvas);
+  /**
+   * Runs the BabylonApp.
+   */
+  public init() {
+    const resultCs = this._createScene();
+    if (!resultCs) return;
 
-  // Create our first scene.
-  const scene = new Scene(engine);
+    this._createCamera();
+    this._createLight();
+    this._createObjects();
 
-  // This creates and positions a free camera (non-mesh)
-  const camera = new FreeCamera("camera1", new Vector3(0, 5, -10), scene);
+    if (this._engine) {
+      // Render every frame
+      this._engine.runRenderLoop(this._update.bind(this));
+    }
+  }
 
-  // This targets the camera to scene origin
-  camera.setTarget(Vector3.Zero());
+  /**
+   * Update Every Frame
+   */
+  private _update() {
+    if (!this._scene) return;
 
-  // This attaches the camera to the canvas
-  camera.attachControl(canvas, true);
+    this._scene.render();
+  }
 
-  // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
-  const light = new HemisphericLight("light1", new Vector3(0, 1, 0), scene);
+  /**
+   * Create Scene and Attach to Canvas
+   */
+  private _createScene() {
+    // Get the canvas element from the DOM.
+    this._canvas = document.getElementById("renderCanvas") as HTMLCanvasElement;
 
-  // Default intensity is 1. Let's dim the light a small amount
-  light.intensity = 0.7;
+    if (!this._canvas || !(this._canvas instanceof HTMLCanvasElement)) {
+      console.error("Canvas not found");
+      return false;
+    }
 
-  // Create a grid material
-  const material = new GridMaterial("grid", scene);
+    // Associate a Babylon Engine to it.
+    this._engine = new Engine(this._canvas);
 
-  // Our built-in 'sphere' shape.
-  const sphere = CreateSphere("sphere1", { segments: 16, diameter: 2 }, scene);
+    // Create our first scene.
+    this._scene = new Scene(this._engine);
+    return true;
+  }
 
-  // Move the sphere upward 1/2 its height
-  sphere.position.y = 2;
+  /**
+   * Create Camera
+   */
+  private _createCamera() {
+    // This creates and positions a free camera (non-mesh)
+    this._camera = new FreeCamera(
+      "camera1",
+      new Vector3(0, 5, -10),
+      this._scene
+    );
 
-  // Affect a material
-  sphere.material = material;
+    // This targets the camera to scene origin
+    this._camera.setTarget(Vector3.Zero());
 
-  // Our built-in 'ground' shape.
-  const ground = CreateGround(
-    "ground1",
-    { width: 6, height: 6, subdivisions: 2 },
-    scene
-  );
+    // This attaches the camera to the canvas
+    this._camera.attachControl(this._canvas, true);
+  }
 
-  // Affect a material
-  ground.material = material;
+  private _createLight() {
+    if (!this._scene) return;
 
-  // Render every frame
-  engine.runRenderLoop(() => {
-    scene.render();
-  });
-};
+    // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
+    const light = new HemisphericLight(
+      "light1",
+      new Vector3(0, 1, 0),
+      this._scene
+    );
 
-export const init = () => {
-  document.addEventListener("DOMContentLoaded", createScene);
-};
+    // Default intensity is 1. Let's dim the light a small amount
+    light.intensity = 0.7;
+  }
+
+  private _createObjects() {
+    // Create a grid material
+    const material = new GridMaterial("grid", this._scene);
+
+    // Our built-in 'sphere' shape.
+    const sphere = CreateSphere(
+      "sphere1",
+      { segments: 16, diameter: 2 },
+      this._scene
+    );
+
+    // Move the sphere upward 1/2 its height
+    sphere.position.y = 2;
+
+    // Affect a material
+    sphere.material = material;
+
+    // Our built-in 'ground' shape.
+    const ground = CreateGround(
+      "ground1",
+      { width: 6, height: 6, subdivisions: 2 },
+      this._scene
+    );
+
+    // Affect a material
+    ground.material = material;
+  }
+}
