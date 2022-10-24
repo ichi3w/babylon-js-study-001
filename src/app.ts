@@ -1,18 +1,14 @@
-import { BaSphere } from "./BaSphere";
-import { BaHouse } from "./BaHouse";
 import { Engine } from "@babylonjs/core/Engines/engine";
 import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
 import { SceneLoader } from "@babylonjs/core/Loading/sceneLoader";
 import { Vector3 } from "@babylonjs/core/Maths/math.vector";
-import { CreateGround } from "@babylonjs/core/Meshes/Builders/groundBuilder";
-import { CreateSphere } from "@babylonjs/core/Meshes/Builders/sphereBuilder";
 import { Scene } from "@babylonjs/core/scene";
 import { BaBox } from "./BaBox";
 import { BaCamera } from "./BaCamera";
 import { BaGround } from "./BaGround";
+import { BaHouse } from "./BaHouse";
 import { BaSound } from "./BaSound";
-
-import { GridMaterial } from "@babylonjs/materials/grid/gridMaterial";
+import { BaSphere } from "./BaSphere";
 
 export class BabylonApp {
   private _canvas?: HTMLCanvasElement;

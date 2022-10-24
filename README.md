@@ -1,6 +1,7 @@
 # Babylon.js 勉強用
 
-Webpack ベースで babylon.js をいじってみる。
+Babylon.js の勉強としてあれこれ触っているものです。
+TypeScript と Webpack ベースで babylon.js をいじってみる。
 
 ## やったこと
 
@@ -9,10 +10,10 @@ Webpack ベースで babylon.js をいじってみる。
 - カメラの作成
 - ライトの作成
 - メッシュの作成
-- レンダリング
 
 - マウス操作
 - マテリアルの追加
+- テクスチャの追加
 
 ## 次、やりたいこと
 
