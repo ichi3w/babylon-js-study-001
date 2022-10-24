@@ -2,7 +2,7 @@
 
 Webpack ベースで babylon.js をいじってみる。
 
-## やりたいこと
+## やったこと
 
 - エンジンの作成
 - シーンの作成
@@ -16,4 +16,5 @@ Webpack ベースで babylon.js をいじってみる。
 
 ## 次、やりたいこと
 
-- SceneLoader 周りを触りたい
+- Viewer 周りを知りたい
+- SceneLoader や Scene の切り替え周りを知りたい

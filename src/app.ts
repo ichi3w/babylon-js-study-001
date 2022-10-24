@@ -1,4 +1,5 @@
-import { BaGround } from "./BaGround";
+import { BaSphere } from "./BaSphere";
+import { BaHouse } from "./BaHouse";
 import { Engine } from "@babylonjs/core/Engines/engine";
 import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
 import { SceneLoader } from "@babylonjs/core/Loading/sceneLoader";
@@ -6,10 +7,12 @@ import { Vector3 } from "@babylonjs/core/Maths/math.vector";
 import { CreateGround } from "@babylonjs/core/Meshes/Builders/groundBuilder";
 import { CreateSphere } from "@babylonjs/core/Meshes/Builders/sphereBuilder";
 import { Scene } from "@babylonjs/core/scene";
+import { BaBox } from "./BaBox";
 import { BaCamera } from "./BaCamera";
+import { BaGround } from "./BaGround";
+import { BaSound } from "./BaSound";
 
 import { GridMaterial } from "@babylonjs/materials/grid/gridMaterial";
-import { Sound } from "@babylonjs/core";
 
 export class BabylonApp {
   private _canvas?: HTMLCanvasElement;
@@ -33,9 +36,19 @@ export class BabylonApp {
     const baGround = new BaGround();
     baGround.createGround();
 
-    this._createObjects();
+    const baBox = new BaBox(this._scene);
+    baBox.createBox(this._scene);
+
+    const baHome = new BaHouse();
+    baHome.createHouse();
+
+    const baSphere = new BaSphere();
+    baSphere.createSphere();
+
+    const baSound = new BaSound();
+    baSound.createSound(this._scene);
+
     // this._loadMesh();
-    // this._createSound();
 
     // Render every frame
     this._engine.runRenderLoop(this._onUpdate.bind(this));
@@ -60,6 +73,10 @@ export class BabylonApp {
     if (!this._engine) return;
 
     this._engine.resize();
+  }
+
+  public onButtonClick() {
+    console.log("Button Clicked");
   }
 
   /**
@@ -99,36 +116,9 @@ export class BabylonApp {
     light.intensity = 0.7;
   }
 
-  private _createObjects() {
-    // Create a grid material
-    const material = new GridMaterial("grid", this._scene);
-
-    // Our built-in 'sphere' shape.
-    const sphere = CreateSphere(
-      "sphere1",
-      { segments: 16, diameter: 2 },
-      this._scene
-    );
-
-    // Move the sphere upward 1/2 its height
-    sphere.position.y = 2;
-
-    // Affect a material
-    sphere.material = material;
-
-    // Our built-in 'ground' shape.
-    const ground = CreateGround(
-      "ground1",
-      { width: 6, height: 6, subdivisions: 2 },
-      this._scene
-    );
-
-    ground.position.y = 0.5;
-
-    // Affect a material
-    ground.material = material;
-  }
-
+  /**
+   * Load Mesh
+   */
   private _loadMesh() {
     SceneLoader.ImportMeshAsync(
       "semi_house",
@@ -136,17 +126,5 @@ export class BabylonApp {
       "both_houses_scene.babylon",
       this._scene
     );
-  }
-
-  private _createSound() {
-    // Load the sound and play it automatically once ready
-    const music = new Sound(
-      "cello",
-      "https://playground.babylonjs.com/sounds/cellolong.wav",
-      this._scene,
-      null,
-      { loop: true, autoplay: true }
-    );
-    music.play();
   }
 }
